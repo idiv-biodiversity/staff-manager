@@ -3,7 +3,7 @@
 Plugin Name: Staff Manager
 Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 Description: WordPress plugin for managing staff at <a href="https://idiv.de" target="_blank">iDiv</a>
-Version: 0.5.0-alpha
+Version: 1.0.0-alpha
 Author: Christian Langer
 Author URI: https://github.com/christianlanger
 Text Domain: staff-manager
