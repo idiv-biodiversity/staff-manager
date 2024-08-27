@@ -152,38 +152,74 @@ function staff_manager_blocks_enqueue() {
     
 }
 
-// Update Check
-add_filter('site_transient_update_plugins', 'plugin_update_check');
+// Force WordPress to check for plugin updates
+//delete_site_transient('update_plugins');
+
+
+
+// Update Check with wp_remote_get 
+// add_filter('site_transient_update_plugins', 'plugin_update_check');
+// function plugin_update_check($transient) {
+//     if (empty($transient->checked)) {
+//         return $transient;
+//     }
+
+//     $plugin_slug = plugin_basename(__FILE__);
+//     $github_response = wp_remote_get('https://api.github.com/repos/idiv-biodiversity/staff-manager/releases/latest');
+
+//     if (is_wp_error($github_response)) {
+//         return $transient;
+//     }
+
+//     $github_data = json_decode(wp_remote_retrieve_body($github_response));
+
+//     if (isset($github_data->tag_name)) {
+//         $new_version = str_replace('v', '', $github_data->tag_name);
+
+//         if (version_compare($transient->checked[$plugin_slug], $new_version, '<')) {
+//             $plugin = array(
+//                 'slug'        => $plugin_slug,
+//                 'new_version' => $new_version,
+//                 'url'         => $github_data->html_url,
+//                 'package'     => $github_data->zipball_url,
+//             );
+//             $transient->response[$plugin_slug] = (object) $plugin;
+//         }
+//     }
+
+//     return $transient;
+// }
+
 function plugin_update_check($transient) {
+    // Check if the transient contains update information
     if (empty($transient->checked)) {
         return $transient;
     }
 
-    $plugin_slug = plugin_basename(__FILE__);
-    $github_response = wp_remote_get('https://api.github.com/repos/idiv-biodiversity/staff-manager/releases/latest');
+    // latest release version on GitHub
+    $remote_version = '1.0.0-alpha';
 
-    if (is_wp_error($github_response)) {
-        return $transient;
-    }
+    // Compare the current version with the remote version
+    if (version_compare($transient->checked['staff-manager/staff-manager.php'], $remote_version, '<')) {
+        $plugin_slug = plugin_basename(__FILE__);
+        $plugin_data = get_plugin_data(__FILE__);
 
-    $github_data = json_decode(wp_remote_retrieve_body($github_response));
+        // Build the update array
+        $update = array(
+            'slug'        => $plugin_slug,
+            'new_version' => $remote_version,
+            'url'         => $plugin_data['PluginURI'],
+            'package'     => 'https://github.com/idiv-biodiversity/staff-manager/archive/refs/tags/v1.0.0-alpha.zip', // URL to the GitHub release zip
+        );
 
-    if (isset($github_data->tag_name)) {
-        $new_version = str_replace('v', '', $github_data->tag_name);
-
-        if (version_compare($transient->checked[$plugin_slug], $new_version, '<')) {
-            $plugin = array(
-                'slug'        => $plugin_slug,
-                'new_version' => $new_version,
-                'url'         => $github_data->html_url,
-                'package'     => $github_data->zipball_url,
-            );
-            $transient->response[$plugin_slug] = (object) $plugin;
-        }
+        // Add the update to the transient
+        $transient->response[$plugin_slug] = (object) $update;
     }
 
     return $transient;
 }
+add_filter('site_transient_update_plugins', 'plugin_update_check');
+
 
 
 
@@ -223,8 +259,6 @@ function plugin_update_details($false, $action, $response) {
 
     return false;
 }
-
-
 
 
 
