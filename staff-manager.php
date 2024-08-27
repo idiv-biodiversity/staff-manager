@@ -188,8 +188,8 @@ function plugin_update_check($transient) {
 
 
 // View details window for new release
-add_filter('plugins_api', 'your_plugin_update_details', 10, 3);
-function your_plugin_update_details($false, $action, $response) {
+add_filter('plugins_api', 'plugin_update_details', 10, 3);
+function plugin_update_details($false, $action, $response) {
     // Check if the action is for plugin information
     if ($action !== 'plugin_information') {
         return false;
