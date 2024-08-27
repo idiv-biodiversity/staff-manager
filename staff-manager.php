@@ -3,7 +3,7 @@
 Plugin Name: Staff Manager
 Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 Description: WordPress plugin for managing staff at <a href="https://idiv.de" target="_blank">iDiv</a>
-Version: 1.0.0-alpha
+Version: 0.5.0-alpha
 Author: Christian Langer
 Author URI: https://github.com/christianlanger
 Text Domain: staff-manager
@@ -13,8 +13,6 @@ GitHub Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 /* ################################################################ */
 /* BASIC INIT STUFF */
 /* ################################################################ */
-
-$config = include('config.php');
 
 // Register "Groups" as CPT
 add_action('init', 'register_groups_post_type');
@@ -155,12 +153,14 @@ function staff_manager_blocks_enqueue() {
 }
 
 // Force WordPress to check for plugin updates
-//delete_site_transient('update_plugins');
+delete_site_transient('update_plugins');
 
 
 // Update Check
 add_filter('site_transient_update_plugins', 'plugin_update_check');
 function plugin_update_check($transient) {
+    $config = include('config.php');
+
     if (empty($transient->checked)) {
         return $transient;
     }
