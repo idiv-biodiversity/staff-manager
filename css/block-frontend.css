@@ -1,0 +1,48 @@
+/* Profile Infos */
+
+.profile-info .affiliations,
+.profile-info .address,
+.profile-info .contact,
+.profile-info .websites {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-top: 20px
+}
+
+.profile-info h4 {
+    text-transform: uppercase;
+}
+.departments a {
+  padding-right: 15px
+}
+
+
+/* bootstrap table -> All Staff */
+
+.profile-table .profile-name a {
+  text-decoration: underline;
+}
+
+.bootstrap-table .search input {
+  padding-left: 30px; /* Space for the search icon */
+  background: #f4f4f4;
+  border: 0;
+  box-shadow: none;
+}
+
+.bootstrap-table .search::before {
+  content: "\f002"; /* Unicode for the FontAwesome search icon */
+  font-family: "Font Awesome 5 Free"; /* Ensure correct FontAwesome font family */
+  font-weight: 900; /* Font weight required for solid icons in FontAwesome 5 */
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #aaa;
+}
+.bootstrap-table .search {
+  position: relative;
+  float: left !important; /* Move the search bar to the left */
+  width: auto;
+}

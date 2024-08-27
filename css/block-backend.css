@@ -1,0 +1,21 @@
+.components-checkbox-control__label {
+  vertical-align: top
+}
+
+a.dropdown-item {
+  color: rgb(52, 52, 52) !important;
+}
+
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+  width: 100%;
+}
+
+.filter-option-inner-inner {
+  text-transform: none;
+}
+
+.btn.dropdown-toggle {
+    color: #5b5b5b !important;
+    background: #ffffff !important;
+    font-weight: normal !important;
+}
