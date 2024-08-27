@@ -14,6 +14,7 @@ GitHub Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 /* BASIC INIT STUFF */
 /* ################################################################ */
 
+$config = include('config.php');
 
 // Register "Groups" as CPT
 add_action('init', 'register_groups_post_type');
@@ -167,6 +168,7 @@ function plugin_update_check($transient) {
     $plugin_slug = plugin_basename(__FILE__);
     $response = wp_remote_get('https://api.github.com/repos/idiv-biodiversity/staff-manager/releases', array(
         'headers' => array(
+            'Authorization' => 'token ' . $config['github_token'],
             'User-Agent'    => 'Staff Manager'
         )
     ));
