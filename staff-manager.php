@@ -167,7 +167,6 @@ function plugin_update_check($transient) {
     $plugin_slug = plugin_basename(__FILE__);
     $response = wp_remote_get('https://api.github.com/repos/idiv-biodiversity/staff-manager/releases', array(
         'headers' => array(
-            'Authorization' => 'token {TOKEN}',
             'User-Agent'    => 'Staff Manager'
         )
     ));
