@@ -1,3 +1,3 @@
-# Staff Manager
+# iDiv Staff Manager
 
 WordPress plugin for managing staff at iDiv
