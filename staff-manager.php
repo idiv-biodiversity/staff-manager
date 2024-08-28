@@ -155,12 +155,10 @@ function staff_manager_blocks_enqueue() {
 // Force WordPress to check for plugin updates
 delete_site_transient('update_plugins');
 
-
 // Update Check
 add_filter('site_transient_update_plugins', 'plugin_update_check');
 function plugin_update_check($transient) {
-    $config = include('config.php');
-
+    include_once(ABSPATH . 'wp-content/custom-config.php');
     if (empty($transient->checked)) {
         return $transient;
     }
@@ -168,7 +166,7 @@ function plugin_update_check($transient) {
     $plugin_slug = plugin_basename(__FILE__);
     $response = wp_remote_get('https://api.github.com/repos/idiv-biodiversity/staff-manager/releases', array(
         'headers' => array(
-            'Authorization' => 'token ' . $config['github_token'],
+            'Authorization' => 'token ' . GITHUB_TOKEN,
             'User-Agent'    => 'Staff Manager'
         )
     ));
@@ -180,25 +178,49 @@ function plugin_update_check($transient) {
 
     $github_data = json_decode(wp_remote_retrieve_body($response), true);
 
-    // Loop to find the "latest"
-    foreach ($github_data as $release) {
-        if ($release['tag_name'] === 'latest') {
-            $new_version = str_replace('v', '', $release['name']);
+    // Get the first release, assuming it’s the latest
+    $latest_release = $github_data[0];
+    
+    // Parse the version from GitHub (removing 'v' prefix if present)
+    $new_version = str_replace('v', '', $latest_release['name']);
 
-            if (version_compare($transient->checked[$plugin_slug], $new_version, '<')) {
-                $plugin = array(
-                    'slug'        => $plugin_slug,
-                    'new_version' => $new_version,
-                    'url'         => $release['html_url'],
-                    'package'     => $release['zipball_url'],
-                );
-                $transient->response[$plugin_slug] = (object) $plugin;
-            }
-            break; // Stop looping
-        }
+    // Compare the version from GitHub with the plugin version
+    if (version_compare($transient->checked[$plugin_slug], $new_version, '<')) {
+        $plugin = array(
+            'slug'        => $plugin_slug,
+            'new_version' => $new_version,
+            'url'         => $latest_release['html_url'],
+            'package'     => $latest_release['zipball_url'],
+        );
+        $transient->response[$plugin_slug] = (object) $plugin;
     }
 
     return $transient;
+}
+
+// Rename the plugin folder after the update and keep it active
+add_filter('upgrader_post_install', 'rename_plugin_folder', 10, 3);
+function rename_plugin_folder($response, $hook_extra, $result) {
+    global $wp_filesystem;
+
+    if ($hook_extra['plugin'] !== plugin_basename(__FILE__)) {
+        return $response;
+    }
+
+    $proper_folder_name = 'staff-manager';
+    $destination = WP_PLUGIN_DIR . '/' . $proper_folder_name;
+
+    // Rename the plugin directory if it's different
+    if ($result['destination_name'] !== $proper_folder_name) {
+        $wp_filesystem->move($result['destination'], $destination);
+        $result['destination'] = $destination;
+        $result['destination_name'] = $proper_folder_name;
+    }
+
+    // Re-activate the plugin after renaming
+    activate_plugin($proper_folder_name . '/' . plugin_basename(__FILE__));
+
+    return $response;
 }
 
 // View details window for new release
@@ -219,14 +241,10 @@ function plugin_update_details($false, $action, $response) {
         $response->author = '<a href="https://github.com/ChristianLanger">Christian Langer</a>';
         $response->homepage = 'https://github.com/idiv-biodiversity/staff-manager';
         $response->download_link = 'https://github.com/idiv-biodiversity/staff-manager/archive/refs/tags/v1.0.0-alpha.zip';
-
-        // Provide a brief description or changelog
         $response->sections = array(
             'description' => 'WordPress plugin for managing staff at <a href="https://idiv.de" target="_blank">iDiv</a>',
             'changelog' => '<h4>Version 1.0.0-alpha</h4><p>- Initial alpha release.</p>'
         );
-
-        // Add the banner images
         $response->banners = array(
             'low' => 'https://home.uni-leipzig.de/idiv/main-page/banner-low-res.jpg',
             'high' => 'https://home.uni-leipzig.de/idiv/main-page/banner-high-res.jpg'
@@ -237,8 +255,6 @@ function plugin_update_details($false, $action, $response) {
 
     return $false;
 }
-
-
 
 
 /* ################################################################ */
