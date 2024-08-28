@@ -3,7 +3,7 @@
 Plugin Name: Staff Manager
 Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 Description: WordPress plugin for managing staff at <a href="https://idiv.de" target="_blank">iDiv</a>
-Version: 1.0.1-alpha
+Version: 1.0.2-alpha
 Author: Christian Langer
 Author URI: https://github.com/christianlanger
 Text Domain: staff-manager
@@ -229,7 +229,8 @@ function rename_plugin_folder($response, $hook_extra, $result) {
 
 // View details window for new release
 add_filter('plugins_api', 'plugin_update_details', 10, 3);
-function plugin_update_details($false, $action, $response) {
+function plugin_update_details($false, $action, $args) {
+    include_once(ABSPATH . 'wp-content/custom-config.php');
     // Check if the action is for plugin information
     if ($action !== 'plugin_information') {
         return $false;
@@ -237,27 +238,49 @@ function plugin_update_details($false, $action, $response) {
 
     $plugin_slug = plugin_basename(__FILE__); 
 
-    if ($response->slug === $plugin_slug) {
-        // Get the plugin details
-        $response->slug = $plugin_slug;
-        $response->name = 'Staff Manager';
-        $response->version = '1.0.1-alpha';
-        $response->author = '<a href="https://github.com/ChristianLanger">Christian Langer</a>';
-        $response->homepage = 'https://github.com/idiv-biodiversity/staff-manager';
-        $response->download_link = 'https://github.com/idiv-biodiversity/staff-manager/archive/refs/tags/v1.0.1-alpha.zip';
-        $response->sections = array(
-            'description' => 'WordPress plugin for managing staff at <a href="https://idiv.de" target="_blank">iDiv</a>',
-            'changelog' => '<h4>Version 1.0.1-alpha</h4><p>- Initial alpha release.</p>'
-        );
-        $response->banners = array(
-            'low' => 'https://home.uni-leipzig.de/idiv/main-page/banner-low-res.jpg',
-            'high' => 'https://home.uni-leipzig.de/idiv/main-page/banner-high-res.jpg'
-        );
-
-        return $response;
+    if ($args->slug !== $plugin_slug) {
+        return $false;
     }
 
-    return $false;
+    // Fetch release details from GitHub
+    $response = wp_remote_get('https://api.github.com/repos/idiv-biodiversity/staff-manager/releases', array(
+        'headers' => array(
+            'Authorization' => 'token ' . GITHUB_TOKEN,
+            'User-Agent'    => 'Staff Manager'
+        )
+    ));
+
+    if (is_wp_error($response)) {
+        error_log('Error: ' . $response->get_error_message());
+        return $false; // Return false if the request failed
+    }
+
+    $github_data = json_decode(wp_remote_retrieve_body($response), true);
+
+    if (empty($github_data) || !is_array($github_data)) {
+        return $false; // Return false if there is no release data
+    }
+
+    // Get the first release, assuming it’s the latest
+    $latest_release = $github_data[0];
+
+    $plugin_info = new stdClass();
+    $plugin_info->name = 'Staff Manager';
+    $plugin_info->slug = $plugin_slug;
+    $plugin_info->version = str_replace('v', '', $latest_release['name']);
+    $plugin_info->author = '<a href="https://github.com/ChristianLanger">Christian Langer</a>';
+    $plugin_info->homepage = 'https://github.com/idiv-biodiversity/staff-manager';
+    $plugin_info->download_link = $latest_release['zipball_url'];
+    $plugin_info->sections = array(
+        'description' => 'WordPress plugin for managing staff at <a href="https://idiv.de" target="_blank">iDiv</a>',
+        'changelog' => '<h4>Version ' . str_replace('v', '', $latest_release['name']) . '</h4>'
+    );
+    $plugin_info->banners = array(
+        'low' => 'https://home.uni-leipzig.de/idiv/main-page/banner-low-res.jpg',
+        'high' => 'https://home.uni-leipzig.de/idiv/main-page/banner-high-res.jpg'
+    );
+
+    return $plugin_info;
 }
 
 
