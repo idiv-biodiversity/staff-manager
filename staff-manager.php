@@ -3,7 +3,7 @@
 Plugin Name: Staff Manager
 Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 Description: WordPress plugin for managing staff at <a href="https://idiv.de" target="_blank">iDiv</a>
-Version: 1.0.0-alpha
+Version: 1.0.1-alpha
 Author: Christian Langer
 Author URI: https://github.com/christianlanger
 Text Domain: staff-manager
@@ -241,13 +241,13 @@ function plugin_update_details($false, $action, $response) {
         // Get the plugin details
         $response->slug = $plugin_slug;
         $response->name = 'Staff Manager';
-        $response->version = '1.0.0-alpha';
+        $response->version = '1.0.1-alpha';
         $response->author = '<a href="https://github.com/ChristianLanger">Christian Langer</a>';
         $response->homepage = 'https://github.com/idiv-biodiversity/staff-manager';
-        $response->download_link = 'https://github.com/idiv-biodiversity/staff-manager/archive/refs/tags/v1.0.0-alpha.zip';
+        $response->download_link = 'https://github.com/idiv-biodiversity/staff-manager/archive/refs/tags/v1.0.1-alpha.zip';
         $response->sections = array(
             'description' => 'WordPress plugin for managing staff at <a href="https://idiv.de" target="_blank">iDiv</a>',
-            'changelog' => '<h4>Version 1.0.0-alpha</h4><p>- Initial alpha release.</p>'
+            'changelog' => '<h4>Version 1.0.1-alpha</h4><p>- Initial alpha release.</p>'
         );
         $response->banners = array(
             'low' => 'https://home.uni-leipzig.de/idiv/main-page/banner-low-res.jpg',
