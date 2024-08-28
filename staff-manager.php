@@ -14,8 +14,6 @@ GitHub Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 /* BASIC INIT STUFF */
 /* ################################################################ */
 
-// test line
-
 // Register "Groups" as CPT
 add_action('init', 'register_groups_post_type');
 function register_groups_post_type() {
@@ -260,60 +258,6 @@ function plugin_update_details($false, $action, $response) {
     }
 
     return $false;
-}
-
-// Backup the .git folder before the update
-add_action('upgrader_pre_install', 'backup_git_folder', 10, 2);
-function backup_git_folder($true, $hook_extra) {
-    global $wp_filesystem;
-
-    if ($hook_extra['plugin'] !== plugin_basename(__FILE__)) {
-        return $true;
-    }
-
-    $plugin_dir = WP_PLUGIN_DIR . '/staff-manager';
-    $git_dir = $plugin_dir . '/.git';
-    $backup_dir = WP_CONTENT_DIR . '/.git-backup';
-
-    if ($wp_filesystem->is_dir($git_dir)) {
-        $wp_filesystem->move($git_dir, $backup_dir);
-    }
-
-    return $true;
-}
-
-// Restore the .git folder after the update
-add_action('upgrader_post_install', 'restore_git_folder', 10, 3);
-function restore_git_folder($response, $hook_extra, $result) {
-    global $wp_filesystem;
-
-    if ($hook_extra['plugin'] !== plugin_basename(__FILE__)) {
-        return $response;
-    }
-
-    $plugin_dir = WP_PLUGIN_DIR . '/staff-manager';
-    $backup_dir = WP_CONTENT_DIR . '/.git-backup';
-    $git_dir = $plugin_dir . '/.git';
-
-    if ($wp_filesystem->is_dir($backup_dir)) {
-        $wp_filesystem->move($backup_dir, $git_dir);
-    }
-
-    return $response;
-}
-
-// Prevent WordPress from deleting the .git folder during update
-add_filter('upgrader_clear_destination', 'prevent_git_removal', 10, 4);
-function prevent_git_removal($remove, $local_destination, $remote_source, $wp_filesystem) {
-    if (strpos($local_destination, 'staff-manager') !== false) {
-        $git_dir = $local_destination . '/.git';
-
-        if ($wp_filesystem->is_dir($git_dir)) {
-            return false; // Prevents the deletion of the existing destination
-        }
-    }
-
-    return $remove;
 }
 
 
