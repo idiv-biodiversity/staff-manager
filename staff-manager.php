@@ -14,6 +14,8 @@ GitHub Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 /* BASIC INIT STUFF */
 /* ################################################################ */
 
+// test line
+
 // Register "Groups" as CPT
 add_action('init', 'register_groups_post_type');
 function register_groups_post_type() {
