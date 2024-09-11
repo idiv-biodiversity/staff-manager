@@ -3,7 +3,7 @@
 Plugin Name: Staff Manager
 Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 Description: WordPress plugin for managing staff at <a href="https://idiv.de" target="_blank">iDiv</a>
-Version: 1.0.2-alpha
+Version: 1.0.5-alpha
 Author: Christian Langer
 Author URI: https://github.com/christianlanger
 Text Domain: staff-manager
@@ -13,6 +13,9 @@ GitHub Plugin URI: https://github.com/idiv-biodiversity/staff-manager
 /* ################################################################ */
 /* BASIC INIT STUFF */
 /* ################################################################ */
+
+//$github_token = getenv('GITHUB_TOKEN'); // Load GitHub token from environment variable
+$github_token = file_get_contents('/var/www/github_token'); // Read the GitHub token from the file
 
 // Register "Groups" as CPT
 add_action('init', 'register_groups_post_type');
@@ -80,64 +83,54 @@ add_action('admin_menu', 'register_staff_manager_submenu');
 function register_staff_manager_submenu() {
     add_submenu_page(
         'edit.php?post_type=staff-manager', // Parent slug
-        __('All groups', 'staff-manager'),      // Page title
-        __('All groups', 'staff-manager'),      // Menu title
+        __('All Groups', 'staff-manager'),      // Page title
+        __('All Groups', 'staff-manager'),      // Menu title
         'manage_options',                   // Capability required to see the menu
         'edit.php?post_type=groups'         // Menu slug
     );
 }
 
+// Shared function to enqueue Bootstrap, Font Awesome, and Selectpicker
+function enqueue_shared_assets() {
+    // Ensure jQuery is enqueued
+    wp_enqueue_script('jquery');
+
+    // Bootstrap 5
+    if ( ! wp_style_is( 'bootstrap-css', 'enqueued' ) ) {
+        wp_enqueue_style('bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
+    }
+    if ( ! wp_script_is( 'bootstrap-js', 'enqueued' ) ) {
+        wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js', array('jquery'), '5.3.0', true);
+    }
+
+    // Selectpicker (Bootstrap 5 compatible)
+    wp_enqueue_style('bootstrap-select-css', 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/css/bootstrap-select.min.css');
+    wp_enqueue_script('bootstrap-select-js', 'https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta2/dist/js/bootstrap-select.min.js', array('jquery', 'bootstrap-js'), null, true);
+
+    // Font Awesome CSS
+    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css', array(), '5.15.4', 'all');
+}
 
 // Enqueue scripts and styles for Admin
 add_action('admin_enqueue_scripts', 'enqueue_backend_styles');
 function enqueue_backend_styles() {
-    // Bootstrap
-    wp_enqueue_style('bootstrap-css', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
-    wp_enqueue_script('popper-js', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js', array('jquery'), null, true);
-    wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js', array('jquery', 'popper-js'), null, true);
-
-    // Selectpicker
-    wp_enqueue_style('bootstrap-select-css', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css');
-    wp_enqueue_script('bootstrap-select-js', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js', array('jquery', 'bootstrap-js'), null, true);
-
-    // Font Awesome CSS
-    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css', array(), '5.15.4', 'all');
-
-    // Custom CSS
+    enqueue_shared_assets(); // Load shared assets
     wp_enqueue_style('block-backend', plugin_dir_url(__FILE__) . 'css/block-backend.css', array(), '1.0.0');
-
 }
 
 // Enqueue scripts and styles for Frontend
 add_action('wp_enqueue_scripts', 'enqueue_frontend_styles');
 function enqueue_frontend_styles() {
+    enqueue_shared_assets(); // Load shared assets
 
-    // Ensure jQuery is enqueued
-    wp_enqueue_script('jquery');
+    // Bootstrap Table (Bootstrap 5 compatible)
+    wp_enqueue_style('bootstrap-table-css', 'https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css');
+    wp_enqueue_script('bootstrap-table-js', 'https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js', array('jquery', 'bootstrap-js'), null, true);
 
-    // Bootstrap
-    wp_enqueue_style('bootstrap-css', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
-    wp_enqueue_script('popper-js', 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js', array('jquery'), null, true);
-    wp_enqueue_script('bootstrap-js', 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js', array('jquery', 'popper-js'), null, true);
-
-    // Bootstrap Table 
-    wp_enqueue_style('bootstrap-table-css', 'https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css');
-    wp_enqueue_script('bootstrap-table-js', 'https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js', array('jquery'), null, true);
-
-    // Selectpicker
-    wp_enqueue_style('bootstrap-select-css', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css');
-    wp_enqueue_script('bootstrap-select-js', 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js', array('jquery', 'bootstrap-js'), null, true);
-
-    // Font Awesome CSS
-    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css', array(), '5.15.4', 'all');
-
-    // Custom CSS
     wp_enqueue_style('block-frontend', plugin_dir_url(__FILE__) . 'css/block-frontend.css', array(), '1.0.0');
-
-    // Custom JS
-    wp_enqueue_script('custom-frontend-js', plugin_dir_url(__FILE__) . 'js/custom-frontend.js', array('jquery'), null, true);
-
+    //wp_enqueue_script('custom-frontend-js', plugin_dir_url(__FILE__) . 'js/custom-frontend.js', array('jquery'), null, true);
 }
+
 
 // Enqueue block scripts
 add_action('enqueue_block_editor_assets', 'staff_manager_blocks_enqueue');
@@ -162,7 +155,9 @@ function staff_manager_blocks_enqueue() {
 // Update Check
 add_filter('site_transient_update_plugins', 'plugin_update_check');
 function plugin_update_check($transient) {
-    include_once(ABSPATH . 'wp-content/custom-config.php');
+    
+    global $github_token;
+
     if (empty($transient->checked)) {
         return $transient;
     }
@@ -170,7 +165,7 @@ function plugin_update_check($transient) {
     $plugin_slug = plugin_basename(__FILE__);
     $response = wp_remote_get('https://api.github.com/repos/idiv-biodiversity/staff-manager/releases', array(
         'headers' => array(
-            'Authorization' => 'token ' . GITHUB_TOKEN,
+            'Authorization' => 'token ' . $github_token,
             'User-Agent'    => 'Staff Manager'
         )
     ));
@@ -230,7 +225,9 @@ function rename_plugin_folder($response, $hook_extra, $result) {
 // View details window for new release
 add_filter('plugins_api', 'plugin_update_details', 10, 3);
 function plugin_update_details($false, $action, $args) {
-    include_once(ABSPATH . 'wp-content/custom-config.php');
+    
+    global $github_token;
+    
     // Check if the action is for plugin information
     if ($action !== 'plugin_information') {
         return $false;
@@ -245,7 +242,7 @@ function plugin_update_details($false, $action, $args) {
     // Fetch release details from GitHub
     $response = wp_remote_get('https://api.github.com/repos/idiv-biodiversity/staff-manager/releases', array(
         'headers' => array(
-            'Authorization' => 'token ' . GITHUB_TOKEN,
+            'Authorization' => 'token ' . $github_token,
             'User-Agent'    => 'Staff Manager'
         )
     ));
@@ -304,7 +301,7 @@ function render_basic_info_block($attributes) {
     $post_id = $post->ID;
 
     // Get the featured image URL
-    $featured_image_url = get_the_post_thumbnail($post_id, 'full', ['class' => 'img-fluid rounded-circle p-4']);
+    $featured_image_url = get_the_post_thumbnail($post_id, 'full', ['class' => 'img-fluid rounded-circle']);
 
     // Translate the position using WPML
     //$position = icl_translate('staff-manager', 'position_' . md5($attributes['position']), $attributes['position']);
@@ -316,7 +313,11 @@ function render_basic_info_block($attributes) {
         <div class="row">
             <div class="col-md-8">
                 <div class="basic-info">
-                    <h2><?php echo esc_html($attributes['title']); ?> <?php echo esc_html($attributes['firstname']); ?> <?php echo esc_html($attributes['lastname']); ?></h2>
+                    <h2>
+                        <?php echo esc_html(isset($attributes['title']) ? $attributes['title'] : ''); ?> 
+                        <?php echo esc_html(isset($attributes['firstname']) ? $attributes['firstname'] : ''); ?> 
+                        <?php echo esc_html(isset($attributes['lastname']) ? $attributes['lastname'] : ''); ?>
+                    </h2>
                     <p><?php echo esc_html($attributes['position']); ?></p>
                     <?php if (!empty($attributes['groups'])):
                         $group_links = array(); ?>
@@ -414,6 +415,23 @@ function register_all_staff_block() {
         'render_callback' => 'render_all_staff_block',
     ));
 }
+function find_custom_block($blocks, $block_name) {
+    foreach ($blocks as $block) {
+        // Check if the block is the one we're looking for
+        if ($block['blockName'] === $block_name) {
+            return $block;
+        }
+        // If the block has inner blocks, search those recursively
+        if (isset($block['innerBlocks']) && !empty($block['innerBlocks'])) {
+            $found_block = find_custom_block($block['innerBlocks'], $block_name);
+            if ($found_block) {
+                return $found_block;
+            }
+        }
+    }
+    return null;
+}
+
 function render_all_staff_block($attributes) {
     $translations = sm_get_translations();
     // Query for all staff_manager posts
@@ -430,11 +448,11 @@ function render_all_staff_block($attributes) {
         // Output search and filter controls
         ?>
         <div class="filters row">
-            <div class="col-md-8 has-search pl-0">
+            <div class="col-md-8 has-search ps-0">
                 <span class="fa fa-search form-control-feedback"></span>
                 <input type="text" id="search-input" class="form-control" placeholder="<?php echo esc_attr($translations['search_staff']); ?>" onkeyup="filterStaff()">
             </div>
-            <div class="col-md-4 pr-0">
+            <div class="col-md-4 pe-0">
                 <select id="group-select" class="form-control" onchange="filterByGroup()">
                     <option value=""><?php echo esc_attr($translations['all_groups']); ?></option>
                     <?php
@@ -444,10 +462,9 @@ function render_all_staff_block($attributes) {
                         $query->the_post();
                         $post_content = get_the_content();
                         $blocks = parse_blocks($post_content);
-                        foreach ($blocks as $block) {
-                            if ($block['blockName'] === 'staff-manager/basic-information' && isset($block['attrs']['groups']) && is_array($block['attrs']['groups'])) {
-                                $groups = array_merge($groups, $block['attrs']['groups']);
-                            }
+                        $block = find_custom_block($blocks, 'staff-manager/basic-information');
+                        if ($block && isset($block['attrs']['groups']) && is_array($block['attrs']['groups'])) {
+                            $groups = array_merge($groups, $block['attrs']['groups']);
                         }
                     }
                     $groups = array_unique($groups);
@@ -484,32 +501,24 @@ function render_all_staff_block($attributes) {
 
                         // Parse the post content to extract the block attributes
                         $blocks = parse_blocks($post_content);
-                        $firstname = '';
-                        $lastname = '';
-                        $position = '';
-                        $groups = [];
-                        $phone = '';
-                        $email = '';
+                        $block = find_custom_block($blocks, 'staff-manager/basic-information');
 
-                        foreach ($blocks as $block) {
-                            if ($block['blockName'] === 'staff-manager/basic-information') {
-                                $firstname = isset($block['attrs']['firstname']) ? $block['attrs']['firstname'] : '';
-                                $lastname = isset($block['attrs']['lastname']) ? $block['attrs']['lastname'] : '';
-                                $position = isset($block['attrs']['position']) ? $block['attrs']['position'] : '';
-                                if (isset($block['attrs']['groups']) && is_array($block['attrs']['groups'])) {
-                                    $groups = array_merge($groups, $block['attrs']['groups']);
-                                }
-                                $email = isset($block['attrs']['email']) ? $block['attrs']['email'] : '';
-                                $phone = isset($block['attrs']['phone']) ? $block['attrs']['phone'] : '';
-                            }
+                        if ($block) {
+                            $firstname = isset($block['attrs']['firstname']) ? $block['attrs']['firstname'] : '';
+                            $lastname = isset($block['attrs']['lastname']) ? $block['attrs']['lastname'] : '';
+                            $position = isset($block['attrs']['position']) ? $block['attrs']['position'] : '';
+                            $groups = isset($block['attrs']['groups']) && is_array($block['attrs']['groups']) ? $block['attrs']['groups'] : [];
+                            $email = isset($block['attrs']['email']) ? $block['attrs']['email'] : '';
+                            $phone = isset($block['attrs']['phone']) ? $block['attrs']['phone'] : '';
+
+                            $groups_string = implode(', ', $groups);
+
+                            echo "<tr class='staff-entry' data-name='" . esc_attr($firstname . ' ' . $lastname) . "' data-groups='" . esc_attr(implode(', ', $groups)) . "'>";
+                            echo "<td><a href='" . $profile_url . "' target='_blank'>" . esc_html($firstname) . " " . esc_html($lastname) . "</a><div>" . esc_html($position) . "</div></td>";
+                            echo "<td>" . esc_html($groups_string) . "</td>";
+                            echo "<td><div>{$translations['phone']}: " . esc_html($phone) . "</div><div>{$translations['email']}: <a href='mailto:" . esc_html($email) . "' target='_blank'>" . esc_html($email) . "</a></div></td>";
+                            echo "</tr>";
                         }
-                        $groups_string = implode(', ', $groups);
-
-                        echo "<tr class='staff-entry' data-name='" . esc_attr($firstname . ' ' . $lastname) . "' data-groups='" . esc_attr(implode(', ', $groups)) . "'>";
-                        echo "<td><a href='" . $profile_url . "' target='_blank'>" . esc_html($firstname) . " " . esc_html($lastname) . "</a><div>" . esc_html($position) . "</div></td>";
-                        echo "<td>" . esc_html($groups_string) . "</td>";
-                        echo "<td><div>{$translations['phone']}: " . esc_html($phone) . "</div><div>{$translations['email']}: <a href='mailto:" . esc_html($email) . "' target='_blank'>" . esc_html($email) . "</a></div></td>";
-                        echo "</tr>";
                     }
                     ?>
                 </tbody>
@@ -728,84 +737,3 @@ function render_single_staff_block($attributes) {
 }
 
 
-
-
-
-
-
-/// REGISTER without CPT UI Plugin
-
-// function cptui_register_my_cpts_staff_manager() {
-
-// 	/**
-// 	 * Post Type: Staff Manager.
-// 	 */
-
-// 	$labels = [
-// 		"name" => esc_html__( "Staff Manager", "custom-post-type-ui" ),
-// 		"singular_name" => esc_html__( "Staff", "custom-post-type-ui" ),
-// 		"menu_name" => esc_html__( "Staff Manager", "custom-post-type-ui" ),
-// 		"all_items" => esc_html__( "All staff", "custom-post-type-ui" ),
-// 		"add_new" => esc_html__( "Add staff", "custom-post-type-ui" ),
-// 		"add_new_item" => esc_html__( "Add new staff", "custom-post-type-ui" ),
-// 		"edit_item" => esc_html__( "Edit staff", "custom-post-type-ui" ),
-// 		"new_item" => esc_html__( "New staff", "custom-post-type-ui" ),
-// 		"view_item" => esc_html__( "View staff", "custom-post-type-ui" ),
-// 		"view_items" => esc_html__( "View staff", "custom-post-type-ui" ),
-// 		"search_items" => esc_html__( "Search staff", "custom-post-type-ui" ),
-// 		"not_found" => esc_html__( "No staff found", "custom-post-type-ui" ),
-// 		"not_found_in_trash" => esc_html__( "No staff found in trash", "custom-post-type-ui" ),
-// 		"parent" => esc_html__( "Parent Staff:", "custom-post-type-ui" ),
-// 		"featured_image" => esc_html__( "Profile image for this Staff", "custom-post-type-ui" ),
-// 		"set_featured_image" => esc_html__( "Set profile image for this Staff", "custom-post-type-ui" ),
-// 		"remove_featured_image" => esc_html__( "Remove profile image for this Staff", "custom-post-type-ui" ),
-// 		"use_featured_image" => esc_html__( "Use as profile image for this Staff", "custom-post-type-ui" ),
-// 		"archives" => esc_html__( "Staff archives", "custom-post-type-ui" ),
-// 		"insert_into_item" => esc_html__( "Insert into Staff", "custom-post-type-ui" ),
-// 		"uploaded_to_this_item" => esc_html__( "Upload to this Staff", "custom-post-type-ui" ),
-// 		"filter_items_list" => esc_html__( "Filter Staff Manager list", "custom-post-type-ui" ),
-// 		"items_list_navigation" => esc_html__( "Staff Manager list navigation", "custom-post-type-ui" ),
-// 		"items_list" => esc_html__( "Staff Manager list", "custom-post-type-ui" ),
-// 		"attributes" => esc_html__( "Staff Manager attributes", "custom-post-type-ui" ),
-// 		"name_admin_bar" => esc_html__( "Staff", "custom-post-type-ui" ),
-// 		"item_published" => esc_html__( "Staff published", "custom-post-type-ui" ),
-// 		"item_published_privately" => esc_html__( "Staff published privately.", "custom-post-type-ui" ),
-// 		"item_reverted_to_draft" => esc_html__( "Staff reverted to draft.", "custom-post-type-ui" ),
-// "item_trashed" => esc_html__( "Staff trashed.", "custom-post-type-ui" ),
-// 		"item_scheduled" => esc_html__( "Staff scheduled", "custom-post-type-ui" ),
-// 		"item_updated" => esc_html__( "Staff updated.", "custom-post-type-ui" ),
-// 		"parent_item_colon" => esc_html__( "Parent Staff:", "custom-post-type-ui" ),
-// 	];
-
-// 	$args = [
-// 		"label" => esc_html__( "Staff Manager", "custom-post-type-ui" ),
-// 		"labels" => $labels,
-// 		"description" => "",
-// 		"public" => true,
-// 		"publicly_queryable" => true,
-// 		"show_ui" => true,
-// 		"show_in_rest" => true,
-// 		"rest_base" => "",
-// 		"rest_controller_class" => "WP_REST_Posts_Controller",
-// 		"rest_namespace" => "wp/v2",
-// 		"has_archive" => false,
-// 		"show_in_menu" => true,
-// 		"show_in_nav_menus" => true,
-// 		"delete_with_user" => false,
-// 		"exclude_from_search" => false,
-// 		"capability_type" => "post",
-// 		"map_meta_cap" => true,
-// 		"hierarchical" => true,
-// 		"can_export" => false,
-// 		"rewrite" => [ "slug" => "staff-manager", "with_front" => true ],
-// 		"query_var" => true,
-// 		"menu_icon" => "dashicons-admin-users",
-// 		"register_meta_box_cb" => "basic_info_meta_box()",
-// 		"supports" => [ "title", "editor", "thumbnail", "page-attributes" ],
-// 		"show_in_graphql" => false,
-// 	];
-
-// 	register_post_type( "staff-manager", $args );
-// }
-
-// add_action( 'init', 'cptui_register_my_cpts_staff_manager' );

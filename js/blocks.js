@@ -97,8 +97,8 @@ registerBlockType('staff-manager/basic-information', {
                 ),
                 el('div', { className: props.className },
                     el('div', { className: 'p-3' },
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Privacy Info', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Privacy Info', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(TextareaControl, {
                                     value: privacyInfo,
@@ -106,8 +106,8 @@ registerBlockType('staff-manager/basic-information', {
                                 })
                             )
                         ),
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Title', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Title', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(TextControl, {
                                     value: title,
@@ -115,8 +115,8 @@ registerBlockType('staff-manager/basic-information', {
                                 })
                             )
                         ),
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('First Name', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('First Name', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(TextControl, {
                                     value: firstname,
@@ -124,8 +124,8 @@ registerBlockType('staff-manager/basic-information', {
                                 })
                             )
                         ),
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Last Name', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Last Name', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(TextControl, {
                                     value: lastname,
@@ -133,8 +133,8 @@ registerBlockType('staff-manager/basic-information', {
                                 })
                             )
                         ),
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Position', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Position', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(TextControl, {
                                     value: position,
@@ -142,8 +142,8 @@ registerBlockType('staff-manager/basic-information', {
                                 })
                             )
                         ),
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Affiliations', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Affiliations', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(RichText, {
                                     tagName: 'div', // or 'p', 'div', 'section', etc. depending on the desired HTML tag
@@ -156,8 +156,8 @@ registerBlockType('staff-manager/basic-information', {
                             )
                         ),
 
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Room', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Room', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(TextControl, {
                                     value: room,
@@ -165,8 +165,8 @@ registerBlockType('staff-manager/basic-information', {
                                 })
                             )
                         ),
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Phone', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Phone', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(TextControl, {
                                     value: phone,
@@ -174,8 +174,8 @@ registerBlockType('staff-manager/basic-information', {
                                 })
                             )
                         ),
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Mobile', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Mobile', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(TextControl, {
                                     value: mobile,
@@ -183,8 +183,8 @@ registerBlockType('staff-manager/basic-information', {
                                 })
                             )
                         ),
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Email', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Email', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(TextControl, {
                                     type: 'email',
@@ -194,8 +194,8 @@ registerBlockType('staff-manager/basic-information', {
                             )
                         ),
                         ['link1', 'link2', 'link3', 'link4', 'link5'].map((url, index) => (
-                            el('div', { key: index, className: 'form-group row' },
-                                el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Link ' + (index + 1), 'staff-manager')),
+                            el('div', { key: index, className: 'mb-3 row' },
+                                el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Link ' + (index + 1), 'staff-manager')),
                                 el('div', { className: 'col-sm-5' },
                                     el(TextControl, {
                                         type: 'url',
@@ -203,7 +203,7 @@ registerBlockType('staff-manager/basic-information', {
                                         onChange: (value) => setAttributes({ [url]: value })
                                     })
                                 ),
-                                el('label', { className: 'col-sm-1 col-form-label font-weight-bold' }, __('Text', 'staff-manager')),
+                                el('label', { className: 'col-sm-1 col-form-label fw-bold' }, __('Text', 'staff-manager')),
                                 el('div', { className: 'col-sm-4' },
                                     el(TextControl, {
                                         value: attributes[url + 'text'],
@@ -213,8 +213,8 @@ registerBlockType('staff-manager/basic-information', {
                             )
                         )),
 
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Address', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Address', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(RichText, {
                                     tagName: 'div', // or 'p', 'div', 'section', etc. depending on the desired HTML tag
@@ -227,8 +227,8 @@ registerBlockType('staff-manager/basic-information', {
                             )
                         ),
                         
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Additional Info', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Additional Info', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el(RichText, {
                                     tagName: 'div', // or 'p', 'div', 'section', etc. depending on the desired HTML tag
@@ -241,8 +241,8 @@ registerBlockType('staff-manager/basic-information', {
                             )
                         ),
 
-                        el('div', { className: 'form-group row' },
-                            el('label', { className: 'col-sm-2 col-form-label font-weight-bold' }, __('Groups', 'staff-manager')),
+                        el('div', { className: 'mb-3 row' },
+                            el('label', { className: 'col-sm-2 col-form-label fw-bold' }, __('Groups', 'staff-manager')),
                             el('div', { className: 'col-sm-10' },
                                 el('select', {
                                     ref: selectRef,
@@ -288,7 +288,7 @@ registerBlockType('staff-manager/all-staff', {
     category: 'widgets',
     edit: function() {
         return el('div', { className: 'border p-2' },
-                    el('div', { className: 'font-weight-bold' }, 'Staff list (all)')
+                    el('div', { className: 'fw-bold' }, 'Staff list (all)')
                 );
     },
     save: function() {
@@ -314,67 +314,72 @@ registerBlockType('staff-manager/group-staff', {
         const { attributes, setAttributes } = props;
         const { id } = attributes;
 
-        // Fetch group options
+        const selectRef = useRef(null);
+
         const groupOptions = useSelect((select) => {
             const posts = select('core').getEntityRecords('postType', 'groups', { per_page: -1 });
-
+        
             if (!posts) {
                 return [];
             }
+        
+            const groupedData = posts.reduce((acc, post) => {
+                const parentPost = posts.find(p => p.id === post.parent);
+                const group_name = parentPost ? parentPost.title.rendered : post.title.rendered;
+                const department_name = post.title.rendered;
+        
+                if (!acc[group_name]) {
+                    acc[group_name] = [];
+                }
+                // Add the department object with id and name
+                if (department_name !== group_name) {
+                    acc[group_name].push({ id: post.id, name: department_name });
+                }
+        
+                return acc;
+            }, {});
+        
+            // Create formatted departments and reverse the order
+            const formattedDepartments = Object.entries(groupedData).map(([group, departments]) => ({
+                label: group,
+                options: departments.map(department => ({
+                    value: department.id, // Use the department ID for the value
+                    label: department.name // Use the department name for the label
+                }))
+            })).reverse();
+        
+            return formattedDepartments;
+        }, []);            
 
-            // Separate parent and child pages
-            const parentPages = posts.filter(post => post.parent === 0);
-            const childPages = posts.filter(post => post.parent !== 0);
+        //console.log(groupOptions);
 
-            // Build options array with optgroup and options
-            const options = parentPages.map(parent => {
-                const childOptions = childPages
-                    .filter(child => child.parent === parent.id)
-                    .map(child => ({
-                        value: child.id,
-                        label: child.title.rendered,
-                    }));
-
-                return {
-                    label: parent.title.rendered,
-                    options: childOptions,
-                };
-            });
-
-            return options.reverse();
-        }, []);
-
-        // Create a ref for the select element
-        const selectRef = React.useRef(null);
-
-        // Use effect to initialize selectpicker
-        React.useEffect(() => {
-            // Initialize selectpicker when the component mounts
-            if (selectRef.current) {
-                jQuery(selectRef.current).selectpicker('refresh');
+        useEffect(() => {
+                if (selectRef.current) {
+                jQuery(selectRef.current).selectpicker('destroy'); // Destroy previous instance if any
+                jQuery(selectRef.current).selectpicker();
             }
-        }, [groupOptions]); // Re-run this effect if groupOptions changes
+        }, [groupOptions]);
 
         // Render the select element with selectpicker
         return el('select', {
             ref: selectRef,
-            className: 'selectpicker', // Add selectpicker class
-            'data-live-search': 'true', // Enable live search in selectpicker
-            title: 'Nothing selected',
+            className: 'selectpicker',
+            'data-live-search': true,
             value: id !== 0 ? id : '',
-            onChange: function (event) {
+            onChange: (event) => {
+                //const selectedValue = event.target.value;
+                //console.log('Selected Value:', selectedValue);
                 setAttributes({ id: parseInt(event.target.value, 10) });
+            }                
             },
-            children: [
-                ...groupOptions.map((group) =>
-                    el('optgroup', { label: group.label, key: group.label },
+            groupOptions.map((group, index) =>
+                    el('optgroup', { label: group.label, key: index }, // Use index for unique keys
                         group.options.map(option =>
-                            el('option', { value: option.value, key: option.value }, option.label)
-                        )
+                        el('option', { key: option.value, value: option.value }, option.label)
                     )
                 )
-            ]
-        });
+            )
+        );
     },
     save: function () {
         return null; // Content is rendered dynamically in PHP
@@ -399,45 +404,43 @@ registerBlockType('staff-manager/single-staff', {
         const { attributes, setAttributes } = props;
         const { id } = attributes;
 
+        const selectRef = useRef(null);
+
         // Fetch staff options
         const staffOptions = useSelect((select) => {
             const posts = select('core').getEntityRecords('postType', 'staff-manager', { per_page: -1 });
+
             if (!posts) {
                 return [];
             }
+
             return posts.map((post) => ({
                 value: post.id,
                 label: post.title.rendered,
             }));
         }, []);
 
-        // Create a ref for the select element
-        const selectRef = React.useRef(null);
-
-        // Use effect to initialize selectpicker
-        React.useEffect(() => {
-            // Initialize selectpicker when the component mounts
+        useEffect(() => {
             if (selectRef.current) {
-                jQuery(selectRef.current).selectpicker('refresh');
+                jQuery(selectRef.current).selectpicker('destroy'); // Destroy previous instance if any
+                jQuery(selectRef.current).selectpicker();
             }
-        }, [staffOptions]); // Re-run this effect if staffOptions changes
+        }, [staffOptions]);
 
         // Render the select element with selectpicker
         return el('select', {
             ref: selectRef,
-            className: 'selectpicker', // Add selectpicker class
-            'data-live-search': 'true', // Enable live search in selectpicker
-            title: 'Nothing selected',
+            className: 'selectpicker',
+            'data-live-search': true,
             value: id !== 0 ? id : '',
-            onChange: function (event) {
+            onChange: (event) => {
                 setAttributes({ id: parseInt(event.target.value, 10) });
-            },
-            children: [
-                ...staffOptions.map((option) =>
-                    el('option', { value: option.value, key: option.value }, option.label)
-                ),
-            ],
-        });
+            }
+        },
+            staffOptions.map((option) =>
+                el('option', { value: option.value, key: option.value }, option.label)
+            )
+        );
     },
     save: function () {
         return null; // Content is rendered dynamically in PHP
